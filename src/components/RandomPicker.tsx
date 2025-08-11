@@ -47,30 +47,32 @@ export default function RandomPicker({
 
   const [nama, nik] = current ? current.split(" – ") : ["", ""];
   return (
-    <div className="flex flex-col items-center gap-4 mb-6">
-      {/* Kotak NIK */}
-      <div className="w-80 h-40 bg-gray-100 border-2 border-gray-400 rounded-lg flex items-center justify-center text-5xl font-mono font-bold text-black">
+    <div className="flex flex-col items-center gap-6 mb-8">
+      {/* Kotak NIK – 30× luas */}
+      <div className="w-[480px] h-[240px] bg-gray-100 border-4 border-gray-400 rounded-xl flex items-center justify-center text-8xl font-mono font-bold text-black shadow-2xl">
         {nik || "————"}
       </div>
-      <p className="text-2xl font-semibold text-gray-800">
+
+      {/* Nama */}
+      <p className="text-3xl font-semibold text-gray-800">
         {nama ? `Nama: ${nama}` : "Nama: —"}
       </p>
 
-      {/* Tombol */}
-      <div className="flex gap-8">
+      {/* Tombol START / STOP */}
+      <div className="flex gap-12">
         <button
           onClick={handleStart}
           disabled={isRunning || !available.length}
-          className="w-28 h-28 rounded-full bg-green-500 hover:bg-green-600 disabled:bg-gray-300 text-white flex items-center justify-center shadow-lg"
+          className="w-32 h-32 rounded-full bg-green-500 hover:bg-green-600 disabled:bg-gray-300 text-white flex items-center justify-center shadow-xl text-3xl transition-transform hover:scale-105"
         >
-          <Play size={48} />
+          <Play size={56} />
         </button>
         <button
           onClick={handleStop}
           disabled={!isRunning}
-          className="w-28 h-28 rounded-full bg-red-500 hover:bg-red-600 disabled:bg-gray-300 text-white flex items-center justify-center shadow-lg"
+          className="w-32 h-32 rounded-full bg-red-500 hover:bg-red-600 disabled:bg-gray-300 text-white flex items-center justify-center shadow-xl text-3xl transition-transform hover:scale-105"
         >
-          <Square size={48} />
+          <Square size={56} />
         </button>
       </div>
     </div>
