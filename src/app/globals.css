@@ -1,20 +1,5 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
 body {
-  font-family: 'Inter', sans-serif;
-}
-
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.animate-spin-slow {
-  animation: spin 3s linear infinite;
+  background: linear-gradient(135deg, #ff0000 0%, #ffffff 50%, #ff0000 100%);
+  background-attachment: fixed;
 }

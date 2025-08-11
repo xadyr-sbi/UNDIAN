@@ -1,31 +1,36 @@
 "use client";
 
-interface WinnerHistoryProps {
-  winners: string[];
+interface Props {
+  winners: { nama: string; nik: string }[];
 }
 
-export default function WinnerHistory({ winners }: WinnerHistoryProps) {
+export default function WinnerHistory({ winners }: Props) {
   return (
-    <div className="bg-white rounded-lg shadow-lg p-6">
-      <h3 className="text-lg font-semibold mb-4 text-gray-700">
-        Histori Pemenang
-      </h3>
+    <div className="bg-white/80 backdrop-blur rounded-xl shadow-2xl p-6">
+      <h3 className="text-xl font-bold mb-4 text-gray-800">Histori Pemenang</h3>
       {winners.length === 0 ? (
-        <p className="text-gray-500 text-center py-8">Belum ada pemenang</p>
+        <p className="text-gray-500 text-center py-4">Belum ada pemenang</p>
       ) : (
-        <ol className="space-y-2">
-          {winners.map((winner, index) => (
-            <li
-              key={index}
-              className="flex items-center gap-3 p-3 bg-yellow-50 rounded-lg"
-            >
-              <span className="bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold">
-                {index + 1}
-              </span>
-              <span className="font-semibold text-gray-700">{winner}</span>
-            </li>
-          ))}
-        </ol>
+        <div className="overflow-x-auto">
+          <table className="w-full text-left">
+            <thead>
+              <tr className="border-b-2 border-red-600">
+                <th className="py-2 px-2 font-semibold text-gray-700">#</th>
+                <th className="py-2 px-2 font-semibold text-gray-700">Nama</th>
+                <th className="py-2 px-2 font-semibold text-gray-700">NIK</th>
+              </tr>
+            </thead>
+            <tbody>
+              {winners.map((w, i) => (
+                <tr key={i} className="border-b">
+                  <td className="py-2 px-2">{i + 1}</td>
+                  <td className="py-2 px-2">{w.nama}</td>
+                  <td className="py-2 px-2 font-mono">{w.nik}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );

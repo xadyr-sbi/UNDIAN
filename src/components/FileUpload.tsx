@@ -1,66 +1,48 @@
 "use client";
-
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import * as XLSX from "xlsx";
 import { Upload } from "lucide-react";
 
-interface FileUploadProps {
-  onFileLoad: (participants: string[]) => void;
+interface Props {
+  onFileLoad: (list: string[]) => void;
 }
 
-export default function FileUpload({ onFileLoad }: FileUploadProps) {
-  const fileInputRef = useRef<HTMLInputElement>(null);
+export default function FileUpload({ onFileLoad }: Props) {
+  const fileRef = useRef<HTMLInputElement>(null);
 
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
     if (!file) return;
-
     const reader = new FileReader();
-    reader.onload = (e) => {
+    reader.onload = (ev) => {
       try {
-        const data = new Uint8Array(e.target?.result as ArrayBuffer);
-        const workbook = XLSX.read(data, { type: "array" });
-        const sheetName = workbook.SheetNames[0];
-        const worksheet = workbook.Sheets[sheetName];
-        const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 }) as string[][];
-        
-        // Ambil kolom pertama sebagai nama peserta
-        const names = jsonData
-          .slice(1) // Skip header
-          .map(row => row[0])
-          .filter(name => name && name.trim());
-        
-        onFileLoad(names);
-        alert(`Berhasil memuat ${names.length} peserta!`);
-      } catch (error) {
-        alert("Gagal membaca file. Pastikan format file benar.");
+        const data = new Uint8Array(ev.target?.result as ArrayBuffer);
+        const wb = XLSX.read(data, { type: "array" });
+        const ws = wb.Sheets[wb.SheetNames[0]];
+        const json = XLSX.utils.sheet_to_json(ws, { header: 1 }) as string[][];
+        const list = json
+          .slice(1)
+          .map((r) => `${r[1]?.trim()} – ${r[0]?.trim()}`)
+          .filter(Boolean) as string[];
+        onFileLoad(list);
+      } catch {
+        alert("Gagal membaca file.");
       }
     };
     reader.readAsArrayBuffer(file);
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-6">
-      <h3 className="text-lg font-semibold mb-4 text-gray-700">
-        Upload Daftar Peserta
-      </h3>
-      <input
-        ref={fileInputRef}
-        type="file"
-        accept=".xlsx,.xls,.csv"
-        onChange={handleFileUpload}
-        className="hidden"
-      />
+    <div className="flex flex-col items-center">
+      <input ref={fileRef} type="file" accept=".xlsx,.xls,.csv" onChange={handleChange} className="hidden" />
       <button
-        onClick={() => fileInputRef.current?.click()}
-        className="w-full flex items-center justify-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-3 rounded-lg transition-colors"
+        onClick={() => fileRef.current?.click()}
+        className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg shadow"
       >
-        <Upload size={20} />
-        Pilih File Excel/CSV
+        <Upload size={18} className="inline mr-2" />
+        Upload
       </button>
-      <p className="text-sm text-gray-500 mt-2">
-        Format: Kolom pertama berisi nama peserta
-      </p>
+      <p className="text-xs text-gray-500 mt-1">Excel/CSV kolom A=NIK, B=Nama</p>
     </div>
   );
 }
