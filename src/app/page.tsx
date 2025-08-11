@@ -2,23 +2,22 @@
 import { useState } from "react";
 import RandomPicker from "@/components/RandomPicker";
 import FileUpload from "@/components/FileUpload";
+import WinnerHistory from "@/components/WinnerHistory";
 
 export default function Home() {
-  /*  state peserta & pemenang  */
   const [participants, setParticipants] = useState<string[]>([]);
-  const [winners, setWinners] = useState<string[]>([]);
-
-  /*  helper: ambil NIK dari string "Nama – NIK"  */
-  const nikOnly = (s: string) => s.split(" – ")[1];
+  const [winners, setWinners] = useState<{ nama: string; nik: string }[]>([]);
 
   const handleAddWinner = (winnerStr: string) => {
-    /*  jika NIK sudah pernah menang → skip  */
-    if (winners.map(nikOnly).includes(nikOnly(winnerStr))) return;
-    setWinners((prev) => [...prev, winnerStr]);
+    const [nama, nik] = winnerStr.split(" – ");
+    if (!winners.find((w) => w.nik === nik)) {
+      setWinners((prev) => [...prev, { nama, nik }]);
+    }
   };
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center bg-white">
+      {/* JUDUL */}
       <div className="text-center mb-4">
         <h1 className="text-4xl font-bold text-black">HADIAH DOORPRIZE</h1>
         <h2 className="text-3xl font-bold text-black">SEMARAK KEMERDEKAAN 80 TH</h2>
@@ -27,20 +26,23 @@ export default function Home() {
         </h3>
       </div>
 
-      {/* Jumlah peserta */}
+      {/* JUMLAH PESERTA */}
       <p className="text-lg font-medium text-gray-800 mb-2">
         Jumlah Peserta: <span className="font-bold">{participants.length}</span>
       </p>
 
-      {/* Kotak random */}
+      {/* RANDOM */}
       <RandomPicker
         participants={participants}
         winners={winners}
         onWinnerSelect={handleAddWinner}
       />
 
-      {/* Upload */}
+      {/* UPLOAD */}
       <FileUpload onFileLoad={setParticipants} />
+
+      {/* HISTORI */}
+      <WinnerHistory winners={winners} />
     </main>
   );
 }

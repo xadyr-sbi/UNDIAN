@@ -5,18 +5,18 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Undian Doorprize - PT GWI",
-  description: "Aplikasi undian doorprize SEMARAK KEMERDEKAAN 80 TH",
+  title: "Undian Doorprize PT GWI",
+  description: "Undian SEMARAK KEMERDEKAAN 80 TH",
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="id">
-      <body className={`${inter.className} bg-red-50`}>{children}</body>
+      <body className={inter.className}>{children}</body>
     </html>
   );
 }

@@ -22,7 +22,7 @@ export default function FileUpload({ onFileLoad }: Props) {
         const json = XLSX.utils.sheet_to_json(ws, { header: 1 }) as string[][];
         const list = json
           .slice(1)
-          .map((r) => `${r[1]?.trim()} – ${r[0]?.trim()}`)
+          .map((r) => `${r[1]?.trim()} – ${r[0]?.trim()}`) // A=NIK, B=Nama
           .filter(Boolean) as string[];
         onFileLoad(list);
       } catch {
