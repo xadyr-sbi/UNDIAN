@@ -1,5 +1,5 @@
 "use client";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import * as XLSX from "xlsx";
 import { Upload } from "lucide-react";
 
@@ -8,7 +8,7 @@ interface Props {
 }
 
 export default function FileUpload({ onFileLoad }: Props) {
-  const fileRef = useRef<HTMLInputElement>(null);
+  const ref = useRef<HTMLInputElement>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -34,15 +34,15 @@ export default function FileUpload({ onFileLoad }: Props) {
 
   return (
     <div className="flex flex-col items-center">
-      <input ref={fileRef} type="file" accept=".xlsx,.xls,.csv" onChange={handleChange} className="hidden" />
+      <input ref={ref} type="file" accept=".xlsx,.xls,.csv" onChange={handleChange} className="hidden" />
       <button
-        onClick={() => fileRef.current?.click()}
+        onClick={() => ref.current?.click()}
         className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg shadow"
       >
         <Upload size={18} className="inline mr-2" />
         Upload
       </button>
-      <p className="text-xs text-gray-500 mt-1">Excel/CSV kolom A=NIK, B=Nama</p>
+      <p className="text-xs text-gray-500 mt-1">Kolom A = NIK, Kolom B = Nama</p>
     </div>
   );
 }
