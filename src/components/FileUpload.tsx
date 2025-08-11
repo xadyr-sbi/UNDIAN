@@ -1,7 +1,7 @@
 "use client";
 import { useRef, useState } from "react";
 import * as XLSX from "xlsx";
-import { Upload, FileText, AlertCircle } from "lucide-react";
+import { Upload } from "lucide-react";
 
 interface Props {
   onFileLoad: (list: string[]) => void;
@@ -26,9 +26,6 @@ export default function FileUpload({ onFileLoad }: Props) {
         const ws = wb.Sheets[wb.SheetNames[0]];
         const json = XLSX.utils.sheet_to_json(ws, { header: 1 }) as string[][];
 
-        console.log("Raw excel rows:", json);
-
-        // A = NIK, B = Nama
         const list = json
           .slice(1)
           .map((row) => {
@@ -38,14 +35,12 @@ export default function FileUpload({ onFileLoad }: Props) {
           })
           .filter(Boolean) as string[];
 
-        console.log("Parsed list:", list);
         if (!list.length) throw new Error("Tidak ada data valid.");
-
         onFileLoad(list);
         setMsg({ type: "ok", text: `✅ Berhasil memuat ${list.length} peserta` });
-      } catch (err: any) {
-        console.error(err);
-        setMsg({ type: "err", text: "❌ Gagal membaca file: " + err.message });
+      } catch (err: unknown) {
+        const message = err instanceof Error ? err.message : "Error tidak diketahui";
+        setMsg({ type: "err", text: `❌ ${message}` });
       } finally {
         setLoading(false);
       }
@@ -55,13 +50,7 @@ export default function FileUpload({ onFileLoad }: Props) {
 
   return (
     <div className="flex flex-col items-center">
-      <input
-        ref={ref}
-        type="file"
-        accept=".xlsx,.xls,.csv"
-        onChange={handleChange}
-        className="hidden"
-      />
+      <input ref={ref} type="file" accept=".xlsx,.xls,.csv" onChange={handleChange} className="hidden" />
       <button
         onClick={() => ref.current?.click()}
         disabled={loading}
@@ -86,8 +75,7 @@ export default function FileUpload({ onFileLoad }: Props) {
             msg.type === "ok" ? "text-green-600" : "text-red-600"
           }`}
         >
-          <FileText size={16} />
-          {msg.text}
+          <span>{msg.text}</span>
         </div>
       )}
     </div>
